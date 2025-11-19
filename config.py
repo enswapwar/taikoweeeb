@@ -33,20 +33,21 @@ PREVIEW_TYPE = 'mp3'
 # 旧式の host/database 設定は使えないため削除。
 # Render の環境変数 MONGO_URI を必須にする。
 # ----------------------------------------
+# MongoDB server settings.
 MONGO = {
-    'uri': os.getenv('MONGO_URI'),
-    'host': ['dummy-host'],
-    'database': 'dummy-db'
+    'uri': "mongodb+srv://mikan_user_3254:DSTp1LwoBLsWZhVE@cluster0.78nvslg.mongodb.net/?appName=Cluster0",
+    'database': 'taikoweeeb'
 }
 
-# Redis server settings (Render では基本無視、必要なら外部RedisをURI指定)
+
 REDIS = {
-    'CACHE_TYPE': 'redis',
-    'CACHE_REDIS_HOST': '127.0.0.1',
-    'CACHE_REDIS_PORT': 6379,
+    'CACHE_TYPE': 'null',
+    'CACHE_REDIS_HOST': None,
+    'CACHE_REDIS_PORT': None,
     'CACHE_REDIS_PASSWORD': None,
     'CACHE_REDIS_DB': None
 }
+
 
 # Secret key used for sessions.
 SECRET_KEY = os.getenv('SECRET_KEY', 'change-me')
