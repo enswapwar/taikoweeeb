@@ -33,12 +33,11 @@ def take_config(name, required=False):
 
 app = Flask(__name__)
 
-# MongoDB 接続：環境変数 MONGO_URI があれば優先
-mongo_uri = os.environ.get('MONGO_URI')
-if mongo_uri:
-    client = MongoClient(mongo_uri)
-else:
-    client = MongoClient(host=take_config('MONGO', required=True)['host'])
+# MongoDB 接続（config.py の MONGO['uri'] を使う）
+from config import MONGO
+
+client = MongoClient(MONGO['uri'])
+db = client[MONGO['database']]
 
 app.secret_key = take_config('SECRET_KEY') or 'change-me'
 app.config['SESSION_TYPE'] = 'redis'
@@ -54,7 +53,6 @@ sess = Session()
 sess.init_app(app)
 csrf = CSRFProtect(app)
 
-db = client[take_config('MONGO', required=True)['database']]
 db.users.create_index('username', unique=True)
 db.songs.create_index('id', unique=True)
 db.scores.create_index('username')
