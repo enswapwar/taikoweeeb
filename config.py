@@ -34,8 +34,9 @@ PREVIEW_TYPE = 'mp3'
 # Render の環境変数 MONGO_URI を必須にする。
 # ----------------------------------------
 MONGO = {
-    # 例: mongodb+srv://user:pass@cluster.mongodb.net/db?retryWrites=true&w=majority
-    'uri': os.getenv('MONGO_URI')
+    'uri': os.getenv('MONGO_URI'),
+    'host': None,
+    'database': None
 }
 
 # Redis server settings (Render では基本無視、必要なら外部RedisをURI指定)
