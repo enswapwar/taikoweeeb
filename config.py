@@ -1,3 +1,5 @@
+import os
+
 # The full URL base asset URL, with trailing slash.
 ASSETS_BASEURL = '/assets/'
 
@@ -26,13 +28,17 @@ PLUGINS = [{
 # Filetype to use for song previews. (mp3/ogg)
 PREVIEW_TYPE = 'mp3'
 
-# MongoDB server settings.
+# ----------------------------------------
+# MongoDB (MongoDB Atlas 使用版)
+# 旧式の host/database 設定は使えないため削除。
+# Render の環境変数 MONGO_URI を必須にする。
+# ----------------------------------------
 MONGO = {
-    'host': ['cluster0.ap0si7s.mongodb.net'],
-    'database': 'cluster0'
+    # 例: mongodb+srv://user:pass@cluster.mongodb.net/db?retryWrites=true&w=majority
+    'uri': os.getenv('MONGO_URI')
 }
 
-# Redis server settings, used for sessions + cache.
+# Redis server settings (Render では基本無視、必要なら外部RedisをURI指定)
 REDIS = {
     'CACHE_TYPE': 'redis',
     'CACHE_REDIS_HOST': '127.0.0.1',
@@ -42,7 +48,7 @@ REDIS = {
 }
 
 # Secret key used for sessions.
-SECRET_KEY = 'change-me'
+SECRET_KEY = os.getenv('SECRET_KEY', 'change-me')
 
 # Git repository base URL.
 URL = 'https://github.com/bui/taiko-web/'
