@@ -35,8 +35,8 @@ PREVIEW_TYPE = 'mp3'
 # ----------------------------------------
 MONGO = {
     'uri': os.getenv('MONGO_URI'),
-    'host': None,
-    'database': None
+    'host': ['dummy-host'],
+    'database': 'dummy-db'
 }
 
 # Redis server settings (Render では基本無視、必要なら外部RedisをURI指定)
