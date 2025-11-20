@@ -182,4 +182,4 @@ def get_config():
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 34801))
     host = '0.0.0.0'
-    app.run(host=host, port=port, debug=True)
+    app.run(host=host, port=port, debug=False)
