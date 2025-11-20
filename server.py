@@ -6,16 +6,16 @@ import websockets
 import json
 import random
 import sys
+import os  # ←追加（元コードに無い場合）
 
 parser = argparse.ArgumentParser(description='Run the taiko-web multiplayer server.')
-import os
-default_port = int(os.environ.get("PORT", 34802))
-
-parser.add_argument('port', type=int, metavar='PORT', nargs='?', default=default_port)
+default_port = int(os.environ.get("PORT", 34802))  # ←変更: 環境変数から取得するように
+parser.add_argument('port', type=int, metavar='PORT', nargs='?', default=default_port)  # ←変更: デフォルトを environment で指定
 parser.add_argument('-b', '--bind-address', default='0.0.0.0', help='Bind server to address.')
 parser.add_argument('-o', '--allow-origin', action='append', help='Limit incoming connections to the specified origin. Can be specified multiple times.')
 args = parser.parse_args()
 
+# 以下は元コードをそのまま保持
 server_status = {
 	"waiting": {},
 	"users": [],
@@ -386,7 +386,7 @@ port = args.port
 print('Starting server on port %d' % port)
 loop = asyncio.get_event_loop()
 tasks = asyncio.gather(
-	websockets.serve(connection, args.bind_address, port, origins=args.allow_origin)
+	websockets.serve(connection, args.bind_address, port, origins=args.allow_origin)  # ←変更: allow_origin対応
 )
 try:
 	loop.run_until_complete(tasks)
