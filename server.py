@@ -11,13 +11,15 @@ from aiohttp import web  # ←HTTPサーバー用追加
 
 async def healthcheck(request):
     return web.Response(text="OK")
+	
+default_port = int(os.environ.get("PORT", 34802))
 
 parser = argparse.ArgumentParser(description='Run the taiko-web multiplayer server.')
-default_port = int(os.environ.get("PORT", args.port))
 parser.add_argument('port', type=int, metavar='PORT', nargs='?', default=default_port)
 parser.add_argument('-b', '--bind-address', default='0.0.0.0', help='Bind server to address.')
 parser.add_argument('-o', '--allow-origin', action='append', help='Limit incoming connections to the specified origin. Can be specified multiple times.')
 args = parser.parse_args()
+args.port = int(os.environ.get("PORT", args.port))
 
 # 以下は元コードをそのまま保持
 server_status = {
@@ -396,7 +398,7 @@ async def main():
     await site.start()
 
     # WebSocketサーバー
-    ws_server = await websockets.serve(connection, '0.0.0.0', 34802)
+    ws_server = await websockets.serve(connection, '0.0.0.0', args.port)
     await ws_server.wait_closed()
 
 # 実行
