@@ -7,10 +7,14 @@ import json
 import random
 import sys
 import os  # ←追加（元コードに無い場合）
+from aiohttp import web  # ←HTTPサーバー用追加
+
+async def healthcheck(request):
+    return web.Response(text="OK")
 
 parser = argparse.ArgumentParser(description='Run the taiko-web multiplayer server.')
-default_port = int(os.environ.get("PORT", 34802))  # ←変更: 環境変数から取得するように
-parser.add_argument('port', type=int, metavar='PORT', nargs='?', default=default_port)  # ←変更: デフォルトを environment で指定
+default_port = int(os.environ.get("PORT", args.port))
+parser.add_argument('port', type=int, metavar='PORT', nargs='?', default=default_port)
 parser.add_argument('-b', '--bind-address', default='0.0.0.0', help='Bind server to address.')
 parser.add_argument('-o', '--allow-origin', action='append', help='Limit incoming connections to the specified origin. Can be specified multiple times.')
 args = parser.parse_args()
@@ -382,28 +386,19 @@ async def connection(ws, path):
 		elif user["action"] == "invite" and user["session"] in server_status["invites"]:
 			del server_status["invites"][user["session"]]
 
-port = args.port
-print('Starting server on port %d' % port)
-loop = asyncio.get_event_loop()
-tasks = asyncio.gather(
-	websockets.serve(connection, args.bind_address, port, origins=args.allow_origin)  # ←変更: allow_origin対応
-)
-try:
-	loop.run_until_complete(tasks)
-	loop.run_forever()
-except KeyboardInterrupt:
-	print("Stopping server")
-	def shutdown_exception_handler(loop, context):
-		if "exception" not in context or not isinstance(context["exception"], asyncio.CancelledError):
-			loop.default_exception_handler(context)
-	loop.set_exception_handler(shutdown_exception_handler)
-	tasks = asyncio.gather(*asyncio.all_tasks(loop=loop), loop=loop, return_exceptions=True)
-	tasks.add_done_callback(lambda t: loop.stop())
-	tasks.cancel()
-	while not tasks.done() and not loop.is_closed():
-		loop.run_forever()
-finally:
-	if hasattr(loop, "shutdown_asyncgens"):
-		loop.run_until_complete(loop.shutdown_asyncgens())
-	loop.close()
+async def main():
+    # HTTPサーバー（Health Check）
+    app = web.Application()
+    app.router.add_get('/health', healthcheck)
+    runner = web.AppRunner(app)
+    await runner.setup()
+    site = web.TCPSite(runner, '0.0.0.0', 8080)  # Health Check用ポート
+    await site.start()
+
+    # WebSocketサーバー
+    ws_server = await websockets.serve(connection, '0.0.0.0', 34802)
+    await ws_server.wait_closed()
+
+# 実行
+asyncio.run(main())
 
