@@ -8,8 +8,11 @@ import random
 import sys
 
 parser = argparse.ArgumentParser(description='Run the taiko-web multiplayer server.')
-parser.add_argument('port', type=int, metavar='PORT', nargs='?', default=34802, help='Port to listen on.')
-parser.add_argument('-b', '--bind-address', default='localhost', help='Bind server to address.')
+import os
+default_port = int(os.environ.get("PORT", 34802))
+
+parser.add_argument('port', type=int, metavar='PORT', nargs='?', default=default_port)
+parser.add_argument('-b', '--bind-address', default='0.0.0.0', help='Bind server to address.')
 parser.add_argument('-o', '--allow-origin', action='append', help='Limit incoming connections to the specified origin. Can be specified multiple times.')
 args = parser.parse_args()
 
