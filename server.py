@@ -1,28 +1,26 @@
 #!/usr/bin/env python3
-
 import argparse
 import asyncio
 import json
 import random
 import os
-from aiohttp import web, WSMsgType  # WSMsgType を使って受信メッセージの種類を判定
+import pathlib
+from aiohttp import web, WSMsgType
 
-# health check ハンドラ
+BASE_DIR = pathlib.Path(__file__).parent
+
 async def healthcheck(request):
     return web.Response(text="OK")
 
-# 環境変数 PORT のデフォルト
 default_port = int(os.environ.get("PORT", 34802))
 
-# CLI 引数
-parser = argparse.ArgumentParser(description='Run the taiko-web multiplayer server.')
+parser = argparse.ArgumentParser(description='Run taiko-web server.')
 parser.add_argument('port', type=int, metavar='PORT', nargs='?', default=default_port)
-parser.add_argument('-b', '--bind-address', default='0.0.0.0', help='Bind server to address.')
-parser.add_argument('-o', '--allow-origin', action='append', help='Limit incoming connections to the specified origin. Can be specified multiple times.')
+parser.add_argument('-b', '--bind-address', default='0.0.0.0')
+parser.add_argument('-o', '--allow-origin', action='append')
 args = parser.parse_args()
 args.port = int(os.environ.get("PORT", args.port))
 
-# サーバー状態
 server_status = {
     "waiting": {},
     "users": [],
@@ -31,20 +29,16 @@ server_status = {
 
 consonants = "bcdfghjklmnpqrstvwxyz"
 
-# メッセージを JSON にするユーティリティ
 def msgobj(t, v=None):
     return json.dumps({"type": t, "value": v} if v is not None else {"type": t})
 
-# 待ち一覧を返すイベント
 def status_event():
     value = [{"id": id, "diff": u["diff"]} for id, u in server_status["waiting"].items()]
     return msgobj("users", value)
 
-# 招待コード生成
 def get_invite():
     return "".join(random.choice(consonants) for _ in range(5))
 
-# 全 ready ユーザーに通知
 async def notify_status():
     msg = status_event()
     tasks = []
@@ -54,7 +48,6 @@ async def notify_status():
     if tasks:
         await asyncio.gather(*tasks)
 
-# WebSocket ハンドラ
 async def ws_handler(request):
     ws = web.WebSocketResponse()
     await ws.prepare(request)
@@ -68,26 +61,22 @@ async def ws_handler(request):
     }
     server_status["users"].append(user)
 
-    # 接続直後に現在の待ち一覧を送る
     await ws.send_str(status_event())
 
     try:
-        # 正しいパターン: ws から受け取るのは WSMessage、msg.type を確認して msg.data を読む
         async for msg in ws:
             if msg.type != WSMsgType.TEXT:
-                # テキスト以外（PING/PONG/CLOSE 等）は無視
                 continue
 
             try:
                 data = json.loads(msg.data)
-            except Exception:
+            except:
                 data = {}
 
             msg_type = data.get("type")
             value = data.get("value")
-            action = user.get("action")
+            action = user["action"]
 
-            # ========== READY ==========
             if action == "ready":
                 if msg_type == "join":
                     if not value:
@@ -166,9 +155,6 @@ async def ws_handler(request):
                     else:
                         await ws.send_str(msgobj("gameend"))
 
-            # =================
-            # waiting/loading/loaded
-            # =================
             elif action in ("waiting", "loading", "loaded"):
                 if msg_type == "leave":
                     if user["session"]:
@@ -206,7 +192,6 @@ async def ws_handler(request):
                             other["ws"].send_str(msgobj("gamestart"))
                         )
 
-            # ========== PLAYING ==========
             elif action == "playing":
                 other = user.get("other_user")
                 if other and "ws" in other:
@@ -239,15 +224,16 @@ async def ws_handler(request):
                     await ws.send_str(msgobj("gameend"))
                     await ws.send_str(status_event())
 
-            # ========== INVITE ==========
             elif action == "invite":
                 if msg_type == "leave":
                     if user["session"] in server_status["invites"]:
                         del server_status["invites"][user["session"]]
+
                     user["action"] = "ready"
                     user["session"] = False
 
                     other = user.get("other_user")
+
                     if other and "ws" in other:
                         other["action"] = "ready"
                         other["session"] = False
@@ -264,16 +250,23 @@ async def ws_handler(request):
                         )
 
     finally:
-        # 切断されたユーザーをリストから削除
         if user in server_status["users"]:
             server_status["users"].remove(user)
 
     return ws
 
+async def index_handler(request):
+    index_path = BASE_DIR / "templates" / "index.html"
+    if not index_path.exists():
+        return web.Response(text="index.html not found", status=404)
+    return web.FileResponse(index_path)
+
 def main():
     app = web.Application()
     app.router.add_get('/health', healthcheck)
+    app.router.add_get('/', index_handler)
     app.router.add_get('/ws', ws_handler)
+    app.router.add_static('/static', path=str(BASE_DIR / "static"), show_index=True)
     web.run_app(app, host=args.bind_address, port=args.port)
 
 if __name__ == "__main__":
