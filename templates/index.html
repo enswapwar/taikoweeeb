@@ -22,10 +22,12 @@
 	<div id="assets"></div>
 	<div id="screen" class="pattern-bg"></div>
 
+	<!-- ここ重要：version-link を復活 -->
 	<div id="version" data-commit="{{version.commit}}" data-commit-short="{{version.commit_short}}">
-  		taiko-web ver.{{version.version}} ({{version.commit_short}})
+		<a href="/" target="_blank" rel="noopener" id="version-link">
+			taiko-web ver.{{version.version}} ({{version.commit_short}})
+		</a>
 	</div>
-
 
 	<noscript>
 		<div data-nosnippet id="unsupportedBrowser">
@@ -33,12 +35,13 @@
 			<span>太鼓ウェブはJavaScriptを有効にする必要があります。<br>Taiko Web requires JavaScript to be enabled in the browser.</span>
 		</div>
 	</noscript>
-  <script src="/src/js/browsersupport.js?f7617c1"></script>
-  <script src="/src/js/main.js?f7617c1"></script>
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-        if (typeof initMain === "function") initMain();
-    });
-  </script>
+
+	<script src="/src/js/browsersupport.js?f7617c1"></script>
+	<script src="/src/js/main.js?f7617c1"></script>
+	<script>
+		document.addEventListener("DOMContentLoaded", () => {
+			if (typeof initMain === "function") initMain();
+		});
+	</script>
 </body>
 </html>
