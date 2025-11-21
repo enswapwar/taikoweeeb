@@ -149,7 +149,7 @@ def main():
     app.router.add_get("/healthcheck", healthcheck)
 
     # /src/ を public/ の中身として公開（重要）
-    app.router.add_static('/src/', path='./public/', show_index=False)
+    app.router.add_static('/src/', path='./src/', show_index=False)
 
     # Render 用ポート
     port = int(os.environ.get("PORT", 8080))
