@@ -4,6 +4,8 @@ import asyncio
 from aiohttp import web
 import aiohttp
 import traceback
+import aiohttp_jinja2
+import jinja2
 
 # ================================
 # グローバル状態
@@ -15,10 +17,24 @@ server_status = {
 }
 
 # ================================
-# index.html を返す
+# 設定読み込み
 # ================================
+with open("./api/config.json", "r", encoding="utf-8") as f:
+    config = json.load(f)
+
+version_info = config["_version"]
+assets_baseurl = config["assets_baseurl"]
+
+# ================================
+# index.html を返す（テンプレート処理）
+# ================================
+@aiohttp_jinja2.template("index.html")
 async def index(request):
-    return web.FileResponse("templates/index.html")
+    # テンプレートに version と config を渡す
+    return {
+        "version": version_info,
+        "config": config
+    }
 
 # ================================
 # healthcheck
@@ -63,9 +79,7 @@ async def connection(request):
 
                 action = data.get("action")
 
-                # ----------------------------
                 # ready（待ち部屋入る）
-                # ----------------------------
                 if action == "ready":
                     gameid = data["gameid"]
                     user["action"] = "waiting"
@@ -73,9 +87,7 @@ async def connection(request):
                     server_status["waiting"][gameid] = user
                     await notify_status()
 
-                # ----------------------------
                 # invite（招待）
-                # ----------------------------
                 elif action == "invite":
                     session = data["session"]
                     user["action"] = "invite"
@@ -83,19 +95,15 @@ async def connection(request):
                     server_status["invites"][session] = user
                     await notify_status()
 
-                # ----------------------------
                 # start（ゲーム開始）
-                # ----------------------------
                 elif action == "start":
                     target = server_status["waiting"].get(data["gameid"])
                     if target:
-                        msg = json.dumps({"type": "start"})
-                        await target["ws"].send_str(msg)
-                        await ws.send_str(msg)
+                        msg_send = json.dumps({"type": "start"})
+                        await target["ws"].send_str(msg_send)
+                        await ws.send_str(msg_send)
 
-                # ----------------------------
                 # play（譜面送信）
-                # ----------------------------
                 elif action == "play":
                     session = data.get("session")
                     target = server_status["invites"].get(session)
@@ -110,20 +118,16 @@ async def connection(request):
         print("Error in websocket:", e)
         traceback.print_exc()
 
-    # =============================
-    # finally（全修正版）
-    # =============================
+    # finally（クリーンアップ）
     finally:
         if user in server_status["users"]:
             server_status["users"].remove(user)
 
-        # waiting の後始末
         if user.get("action") == "waiting" and "gameid" in user:
             gameid = user.get("gameid")
             if gameid in server_status["waiting"]:
                 del server_status["waiting"][gameid]
 
-        # invite の後始末
         if user.get("action") == "invite" and "session" in user:
             session = user.get("session")
             if session in server_status["invites"]:
@@ -139,40 +143,22 @@ async def connection(request):
 def main():
     app = web.Application()
 
-    async def api_config(request):
-        return web.FileResponse("./api/config.json")
-
-    app.router.add_get("/api/config", api_config)
-    app.router.add_static('/api/', path='./api/', show_index=False)
+    # Jinja2 テンプレート設定
+    aiohttp_jinja2.setup(app, loader=jinja2.FileSystemLoader("./templates"))
 
     # ルート
     app.router.add_get("/", index)
 
-    # -------------------------------
-# API: categories.json を返す
-# -------------------------------
-    async def api_categories(request):
-        return web.FileResponse("./api/categories.json")
+    # API
+    app.router.add_get("/api/config", lambda r: web.FileResponse("./api/config.json"))
+    app.router.add_get("/api/categories", lambda r: web.FileResponse("./api/categories.json"))
+    app.router.add_get("/api/genres", lambda r: web.FileResponse("./api/genres.json"))
+    app.router.add_get("/api/songs", lambda r: web.FileResponse("./api/songs.json"))
 
-# -------------------------------
-# API: genres.json を返す
-# -------------------------------
-    async def api_genres(request):
-        return web.FileResponse("./api/genres.json")
-
-# -------------------------------
-# API: songs.json を返す
-# -------------------------------
-    async def api_songs(request):
-        return web.FileResponse("./api/songs.json")
-
-    # -------------------------------
-    # ルーターに追加
-    # -------------------------------
-    app.router.add_get("/api/categories", api_categories)
-    app.router.add_get("/api/genres", api_genres)
-    app.router.add_get("/api/songs", api_songs)
-
+    # 静的ファイル
+    app.router.add_static('/src/', path='./src/', show_index=False)
+    app.router.add_static('/assets/', path='./assets/', show_index=False)
+    app.router.add_static('/api/', path='./api/', show_index=False)
 
     # WebSocket
     app.router.add_get("/ws", connection)
@@ -180,14 +166,8 @@ def main():
     # healthcheck
     app.router.add_get("/healthcheck", healthcheck)
 
-    # /src/ を public/ の中身として公開（重要）
-    app.router.add_static('/src/', path='./src/', show_index=False)
-
-    app.router.add_static('/assets/', path='./assets/', show_index=False)
-
     # Render 用ポート
     port = int(os.environ.get("PORT", 8080))
-
     web.run_app(app, host="0.0.0.0", port=port)
 
 if __name__ == "__main__":
