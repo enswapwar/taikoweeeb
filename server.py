@@ -139,6 +139,12 @@ async def connection(request):
 def main():
     app = web.Application()
 
+    async def api_config(request):
+        return web.FileResponse("./api/config.json")
+
+    app.router.add_get("/api/config", api_config)
+    app.router.add_static('/api/', path='./api/', show_index=False)
+
     # ルート
     app.router.add_get("/", index)
 
