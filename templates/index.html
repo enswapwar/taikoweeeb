@@ -22,13 +22,9 @@
 	<div id="assets"></div>
 	<div id="screen" class="pattern-bg"></div>
 
-	<div data-nosnippet id="version">
-		<a href="/" target="_blank" rel="noopener" id="version-link" class="stroke-sub"
-		   alt="taiko-web ver.8.31.23 (f7617c1)">
-			taiko-web ver.8.31.23 (f7617c1)
-		</a>
+	<div id="version" data-commit="{{version.commit}}" data-commit-short="{{version.commit_short}}">
+  		taiko-web ver.{{version.version}} ({{version.commit_short}})
 	</div>
-
 	<script src="/src/js/browsersupport.js?f7617c1"></script>
 	<script src="/src/js/main.js?f7617c1"></script>
 
