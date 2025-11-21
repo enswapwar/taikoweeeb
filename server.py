@@ -148,6 +148,32 @@ def main():
     # ルート
     app.router.add_get("/", index)
 
+    # -------------------------------
+# API: categories.json を返す
+# -------------------------------
+    async def api_categories(request):
+        return web.FileResponse("./api/categories.json")
+
+# -------------------------------
+# API: genres.json を返す
+# -------------------------------
+    async def api_genres(request):
+        return web.FileResponse("./api/genres.json")
+
+# -------------------------------
+# API: songs.json を返す
+# -------------------------------
+    async def api_songs(request):
+        return web.FileResponse("./api/songs.json")
+
+    # -------------------------------
+    # ルーターに追加
+    # -------------------------------
+    app.router.add_get("/api/categories", api_categories)
+    app.router.add_get("/api/genres", api_genres)
+    app.router.add_get("/api/songs", api_songs)
+
+
     # WebSocket
     app.router.add_get("/ws", connection)
 
