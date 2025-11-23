@@ -478,20 +478,33 @@ for (let selector in assets.cssBackground) {
 		return css.join("\n")
 	}
 	ajax(url, customRequest, customResponse){
-		return new Promise((resolve, reject) => {
-			var request = new XMLHttpRequest()
-			if(customRequest){ customRequest(request) }
-			request.open("GET", url)
-			request.onload = () => {
-				if(request.status >= 200 && request.status < 300){
-					if(customResponse){ resolve(customResponse(request)) }
-					else{ resolve(request.responseText) }
-				}else{ reject(request.status + " " + request.statusText) }
-			}
-			request.onerror = () => reject(request.status + " " + request.statusText)
-			request.send()
-		})
-	}
+    return new Promise((resolve, reject) => {
+        var request = new XMLHttpRequest()
+
+        // カスタムリクエスト設定があれば適用
+        if(customRequest){ customRequest(request) }
+
+        request.open("GET", url)
+
+        request.onload = () => {
+            if(request.status >= 200 && request.status < 300){
+                try {
+                    // カスタムレスポンスがあればそれを使う
+                    if(customResponse){ resolve(customResponse(request)) }
+                    else {
+                        // responseType が設定されていれば response を返す
+                        resolve(request.responseType && request.responseType !== "" ? request.response : request.responseText)
+                    }
+                } catch(e) { reject(e) }
+            } else {
+                reject(request.status + " " + request.statusText)
+            }
+        }
+
+        request.onerror = () => reject(request.status + " " + request.statusText)
+        request.send()
+    })
+}
 	loadScript(url){
 		return new Promise((resolve, reject) => {
 			var script = document.createElement("script")
