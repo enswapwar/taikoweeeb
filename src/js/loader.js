@@ -96,36 +96,40 @@ class Loader{
 			assets.image[id] = image
 		})
 
-		var css = []
-		for(let selector in assets.cssBackground){
-			let name = assets.cssBackground[selector]
-			var url = gameConfig.assets_baseurl + "img/" + name
-			this.addPromise(this.ajax(url, request => {
-				request.responseType = "blob"
-			}).then(blob => {
-				var id = this.getFilename(name)
-				var image = document.createElement("img")
-				let blobUrl = URL.createObjectURL(blob)
-				var promise = pageEvents.load(image).then(() => {
-					var gradient = ""
-					if(selector === ".pattern-bg"){
-						this.screen.style.backgroundImage = "url(\"" + blobUrl + "\")"
-					}else if(selector === "#song-search"){
-						gradient = this.songSearchGradient
-					}
-					css.push(this.cssRuleset({
-						[selector]: {
-							"background-image": gradient + "url(\"" + blobUrl + "\")"
-						}
-					}))
-				})
-				image.id = name
-				image.src = blobUrl
-				this.assetsDiv.appendChild(image)
-				assets.image[id] = image
-				return promise
-			}), url)
-		}
+		// 背景画像読み込み修正版
+var css = [];
+for (let selector in assets.cssBackground) {
+    let name = assets.cssBackground[selector];
+    let url = gameConfig.assets_baseurl + "img/" + name;
+    this.addPromise(this.ajax(
+        url,
+        request => { request.responseType = "blob"; }, // ここでblob指定
+        request => request.response // blobをそのまま返す
+    ).then(blob => {
+        let id = this.getFilename(name);
+        let image = document.createElement("img");
+        let blobUrl = URL.createObjectURL(blob);
+        let promise = pageEvents.load(image).then(() => {
+            let gradient = "";
+            if (selector === ".pattern-bg") {
+                loader.screen.style.backgroundImage = "url('" + blobUrl + "')";
+            } else if (selector === "#song-search") {
+                gradient = this.songSearchGradient;
+            }
+            css.push(this.cssRuleset({
+                [selector]: {
+                    "background-image": gradient + "url('" + blobUrl + "')"
+                }
+            }));
+        });
+        image.id = name;
+        image.src = blobUrl;
+        this.assetsDiv.appendChild(image);
+        assets.image[id] = image;
+        return promise;
+    }), url);
+}
+
 
 		assets.views.forEach(name => {
 			var id = this.getFilename(name)
