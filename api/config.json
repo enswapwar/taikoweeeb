@@ -6,7 +6,7 @@
     "version": "8.31.23"
   },
   "accounts": false,
-  "assets_baseurl": "./assets/",
+  "assets_baseurl": "/assets/",
   "assets_no_dir": true,
   "custom_js": "",
   "email": null,
@@ -129,7 +129,7 @@
       "url": "../../plugins/debugging-testing/convert-lyrics-to-vtt.taikoweb.js"
     },
     {
-      "hide":  true,
+      "hide": true,
       "start": false,
       "url": "../../disable-judge-scores.taikoweb.js"
     }
