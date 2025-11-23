@@ -53,6 +53,8 @@ class Loader{
 		}
 
 		this.addPromise(new Promise((resolve, reject) => {
+			// comment out
+			/*
 			if(
 				versionLink.href !== gameConfig._version.url &&
 				gameConfig._version.commit &&
@@ -60,6 +62,8 @@ class Loader{
 			){
 				reject("Version on the page and config does not match\n(page:  " + pageVersion + ",\nconfig: "+ gameConfig._version.commit + ")")
 			}
+			*/
+			resolve()
 			var cssCount = document.styleSheets.length + assets.css.length
 			assets.css.forEach(name => {
 				var stylesheet = document.createElement("link")
