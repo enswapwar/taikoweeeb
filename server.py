@@ -149,7 +149,6 @@ def main():
     app.router.add_static('/src/', path='./src/', show_index=False)
     app.router.add_static('/assets/', path='./assets/', show_index=False)
     app.router.add_static('/plugins/', path='./plugins/', show_index=False)
-    app.router.add_static('/disable-judge-scores.taikoweb.js', path='./disable-judge-scores.taikoweb.js', show_index=False)
 
     port = int(os.environ.get("PORT", 8080))
     web.run_app(app, host="0.0.0.0", port=port)
