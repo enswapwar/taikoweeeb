@@ -133,6 +133,9 @@ def main():
     async def api_songs(request):
         return web.FileResponse("./api/songs.json")
 
+    async def disable_judge_scores(request):
+        return web.FileResponse("./disable-judge-scores.taikoweb.js")
+
     # ================================
     # ルーター設定
     # ================================
@@ -149,11 +152,7 @@ def main():
     app.router.add_static('/src/', path='./src/', show_index=False)
     app.router.add_static('/assets/', path='./assets/', show_index=False)
     app.router.add_static('/plugins/', path='./plugins/', show_index=False)
-    async def disable_judge_scores(request):
-    return web.FileResponse("./disable-judge-scores.taikoweb.js")
-
-app.router.add_get("/disable-judge-scores.taikoweb.js", disable_judge_scores)
-
+    app.router.add_get("/disable-judge-scores.taikoweb.js", disable_judge_scores)
 
     port = int(os.environ.get("PORT", 8080))
     web.run_app(app, host="0.0.0.0", port=port)
