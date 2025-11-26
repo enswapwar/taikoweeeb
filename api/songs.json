@@ -2,14 +2,23 @@
   {
     "id": 1, 
     "order": 1,
-    "title": "Sadistic.Music∞Factory",
-    "subtitle": "「ProjectDIVA-f」より",
+    "title": "千本桜",
+    "subtitle": " ",
     "courses": {
-      "easy": null,
-      "hard": null,
-      "normal": null,
+      "easy": {
+        "stars": 3,
+        "branch": false
+      },
+      "hard": {
+        "stars": 6,
+        "branch": false
+      },
+      "normal": {
+        "stars": 5,
+        "branch": false
+      },
       "oni": {
-        "stars": 10,
+        "stars": 7,
         "branch": false
       },
       "ura": null
