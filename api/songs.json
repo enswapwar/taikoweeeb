@@ -21,7 +21,10 @@
         "stars": 7,
         "branch": false
       },
-      "ura": null
+      "ura": {
+        "stars": 8,
+        "branch": false
+      },
     },
     "preview": 0,
     "category_id": 3,
