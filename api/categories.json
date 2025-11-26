@@ -143,44 +143,4 @@
       "tw": "NAMCO原來的"
     }
   },
-  {
-    "aliases": null,
-    "id": 8,
-    "song_skin": {
-      "background": "#ff5716",
-      "bg_img": "bg_genre_6.png",
-      "border": ["#ffa66b", "#b53000"],
-      "info_fill": "#961e00",
-      "outline": "#941c00",
-      "sort": 7
-    },
-    "title": "MARIO Original",
-    "title_lang": {
-      "cn": "MARIO原来的",
-      "en": "Mario original",
-      "ja": "マリオオリジナル",
-      "ko": "MARIO오리지널",
-      "tw": "MARIO原來的"
-    }
-  },
-  {
-    "aliases": null,
-    "id": 9,
-    "song_skin": {
-      "background": "#fa8072",
-      "bg_img": "bg_genre_7.png",
-      "border": ["#fa8072", "#cd5c5c"],
-      "info_fill": "#fa8072",
-      "outline": "#dc143c",
-      "sort": 7
-    },
-    "title": "limited",
-    "title_lang": {
-      "cn": "有限的时间",
-      "en": "Limited time",
-      "ja": "期間限定",
-      "ko": "기간 한정",
-      "tw": "有限的時間"
-    }
-  }
 ]
