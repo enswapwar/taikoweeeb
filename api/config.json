@@ -69,8 +69,8 @@
       "url": "../../plugins/workarounds/offline-account.taikoweb.js"
     },
     {
-      "hide": true,
-      "start": true,
+      "hide": false,
+      "start": false,
       "url": "../../plugins/accessibility/disable-animations.taikoweb.js"
     },
     {
