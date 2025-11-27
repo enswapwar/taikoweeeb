@@ -30,9 +30,13 @@ class Settings{
 				type: "keyboard",
 				default: {
 					ka_l: ["d"],
+					ka_l: ["s"],
 					don_l: ["f"],
+					don_l: ["g"],
 					don_r: ["j"],
+					don_r: ["h"],
 					ka_r: ["k"]
+					ka_r: ["l"]
 				},
 				touch: false
 			},
