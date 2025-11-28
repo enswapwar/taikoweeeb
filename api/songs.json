@@ -158,6 +158,47 @@
       {
     "id": 4, 
     "order": 4,
+    "title": "魑魅魍魎",
+    "subtitle": "Laur",
+    "courses": {
+      "easy": null
+      "hard": null
+      "normal": null
+      "oni": {
+        "stars": 10,
+        "branch": false
+      },
+      "ura": null
+    },
+    "preview": 0,
+    "category_id": 7,
+    "category": "NamcoOriginal™ Music",
+    "title_lang": {
+      "ja": null,
+      "en": null,
+      "cn": null,
+      "tw": null,
+      "ko": null
+    },
+    "subtitle_lang": {
+      "ja": null,
+      "en": null,
+      "cn": null,
+      "tw": null,
+      "ko": null
+    },
+    "type": "tja",
+    "music_type": "ogg",
+    "volume": 1.0,
+    "lyrics": false,
+    "offset": null,
+    "song_skin": null,
+    "maker": null,
+    "hash": null
+  },
+        {
+    "id": 4, 
+    "order": 4,
     "title": "≠MM",
     "subtitle": " ",
     "courses": {
