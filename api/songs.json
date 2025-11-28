@@ -11,7 +11,7 @@
       },
       "hard": {
         "stars": 6,
-        "branch": false
+        "branch": fals
       },
       "normal": {
         "stars": 5,
@@ -211,9 +211,9 @@
     "title": "魑魅魍魎",
     "subtitle": "Laur",
     "courses": {
-      "easy": null
-      "hard": null
-      "normal": null
+      "easy": null,
+      "hard": null,
+      "normal": null,
       "oni": {
         "stars": 10,
         "branch": false
@@ -252,9 +252,9 @@
     "title": "RAGING FIRE",
     "subtitle": "Δ→Low",
     "courses": {
-      "easy": null
-      "hard": null
-      "normal": null
+      "easy": null,
+      "hard": null,
+      "normal": null,
       "oni": {
         "stars": 8,
         "branch": false
