@@ -155,15 +155,24 @@
     "maker": null,
     "hash": null
   },
-      {
-    "id": 5, 
-    "order": 5,
-    "title": "魑魅魍魎",
-    "subtitle": "Laur",
+         {
+    "id": 4, 
+    "order": 4,
+    "title": "≠MM",
+    "subtitle": " ",
     "courses": {
-      "easy": null
-      "hard": null
-      "normal": null
+      "easy": {
+        "stars": 5,
+        "branch": false
+      },
+      "hard": {
+        "stars": 8,
+        "branch": false
+      },
+      "normal": {
+        "stars": 7,
+        "branch": false
+      },
       "oni": {
         "stars": 10,
         "branch": false
@@ -196,24 +205,15 @@
     "maker": null,
     "hash": null
   },
-        {
-    "id": 4, 
-    "order": 4,
-    "title": "≠MM",
-    "subtitle": " ",
+      {
+    "id": 5, 
+    "order": 5,
+    "title": "魑魅魍魎",
+    "subtitle": "Laur",
     "courses": {
-      "easy": {
-        "stars": 5,
-        "branch": false
-      },
-      "hard": {
-        "stars": 8,
-        "branch": false
-      },
-      "normal": {
-        "stars": 7,
-        "branch": false
-      },
+      "easy": null
+      "hard": null
+      "normal": null
       "oni": {
         "stars": 10,
         "branch": false
