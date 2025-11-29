@@ -1,9 +1,102 @@
 # taiko-web
-A web-based Taiko no Tatsujin simulator.
+ウェブ上で動作する太鼓の達人シュミレーター
 
-Running instance: [https://taiko.bui.pm](https://taiko.bui.pm)
+ランニング(実行)はrenderなどのpyなどを動かせるものを使う、別に自作サーバーでもpyが動かせるならそれでOK
 
-Still in development. Works best with Chrome.
+server.pyでデプロイすること
+
+開発は進んでるらしいけどみかんにはそんな能力ないから曲しか追加できません。
+
+Google chromeで動作確認済み、基本的に最新のバージョンであれば何でも動作するはず
 
 ## Setup
-Please see the [Setup](https://github.com/bui/taiko-web/wiki/Setup) page for setup instructions.
+クローンするか少し自分なりに改変して
+```
+python3 server.py
+```
+
+で起動させる。インストさせるものは基本的にrequirements.txtに用意するなりして、この状態でも最低限動かせるものは入っている。
+
+でもpip install -r requirements.txtをしないとrequirements.txtにあるものがインストールされないので、必然的に必要になる
+
+ディレクトリの構成は基本的に変えないほうが良い、server.pyが拾うディレクトリが設定されてるので変えるなら設定を変更させること。
+
+変更する場合はserver.pyにある
+```
+app.router.add_static('/〜〜〜/', path='./〜〜〜/', show_index=False)
+```
+などに変更して動作させること。
+
+でもserver.pyでadd_staticしている物もあるので用意に改変はおすすめできない、上級者向けって感じ。
+
+（例えば/api/が丸ごと動的ディレクトリになってるのでsongs.jsonなどの中身だけいじること、ディレクトリ名やファイル名を変えるのはエラって怒られるので注意）
+
+譜面と音楽(tja,ogg,mp3)を追加する場合はsongs/(ID)/の中に入れる、IDには好きな数字を入れるが他の曲とのIDと被るとエラーを吐くので一つ一つ別々のIDにすること
+
+追加した場合はapi/songs.jsonを書き換える必要があり、それには難易度、星の数、ジャンル、IDを書く必要がある。
+
+IDはsongs/(ID)/の決めたIDを入力する。でたらめに入力すると普通にファイル見つけられなくて404吐く。
+
+でもコピってそれなりに改変したらそれだけでも十分動作する。最後の } には , がいらないので注意。普通にエラー落ちする
+
+また譜面と音楽のディレクトリもまとめるなどする場合は上のようにapp.routerを変えること。そうじゃないと譜面などが読み込まれない。
+
+songs.jsonの中身を一部例として載せておく ///をコメント代わりに入れる、
+
+jsonはコメント機能基本ないので///のあとにあるものを消して動かすこと。そうじゃないとjsonが存在しない構文を参照してエラー落ちする
+```
+  {
+    "id": 1,    ///ここにIDを入れる
+    "order": 1,  ///これはおそらく太鼓ウェブの曲の並び順だと思う。IDでも普通に動く、でも他のIDと干渉しないように。
+    "title": "千本桜",  ///ここに曲名を入れる、千本桜と入力されてるのでtaikoweb上で千本桜という曲名が出てくる
+    "subtitle": " ",  ///ここにサブタイトル、今の太鼓ではアーティストなどが入る。
+    "courses": {  ///ここからは難易度を決めていく。
+      "easy": {    ///これはかんたんの難易度を決める。
+        "stars": 3,  ///これは星の数、公式譜面のかんたんの最高星数は5で、普通は7でむずかしいは8で鬼が10になる。裏も同様に10
+        "branch": false
+      },
+      "hard": {
+        "stars": 6,  ///これはむずかしいの難易度を決める、星の数は上記通りに
+        "branch": false
+      },
+      "normal": {
+        "stars": 5,  ///これは普通の難易度
+        "branch": false
+      },
+      "oni": {
+        "stars": 7,  ///これはおにの難易度 
+        "branch": false
+      },
+      "ura": {
+        "stars": 8,  ///これは裏おにの難易度
+        "branch": false
+      }
+    },  ///}のあとの , は絶対に必要
+    "preview": 0,
+    "category_id": 3,  ///categoryを決める、categories.jsonから見て参照する。ボーカロイドは3というIDになる
+    "category": "VOCALOID™ Music",  ///categoryだが、category_idを決めるとデプロイしたときに勝手に書き換わるので書かなくても大丈夫
+    "title_lang": {
+      "ja": null,  ///タイトルの日本語表記、英語表記などを決めていく、でも一つだけでいいならnullにする
+      "en": null,
+      "cn": null,
+      "tw": null,
+      "ko": null
+    },
+    "subtitle_lang": {
+      "ja": null,  ///これはサブタイトル、書き方はさっきと同じ
+      "en": null,
+      "cn": null,
+      "tw": null,
+      "ko": null
+    },
+    "type": "tja",    ///これはsongs/(ID)/の譜面ファイルの拡張子になる、基本的にはtjaにしておく
+    "music_type": "ogg",  ///これはsongs/(ID)/の中の音楽ファイルの拡張子になる、どちらともあっていないと404になりエラーが出てできないので注意
+    "volume": 1.0,
+    "lyrics": false,
+    "offset": null,
+    "song_skin": null,
+    "maker": null,
+    "hash": null
+  }  ///曲を増やすなら } に , をつけて下に同じものを続ける、続けないなら } に , はいらない、jsonの構文エラーによって起動できなくなる。
+```
+何回も言うがIDはsongs/(ID)/と一致させることが重要。そうじゃないとファイルが見つからないので一致させる。
