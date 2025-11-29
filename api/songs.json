@@ -286,5 +286,111 @@
     "song_skin": null,
     "maker": null,
     "hash": null
+  },
+   {
+    "id": 7, 
+    "order": 7,
+    "title": "初音ミクの激唱",
+    "subtitle": "cosMo＠暴走P feat.初音ミク",
+    "courses": {
+      "easy": {
+        "stars": 5,
+        "branch": false
+      },
+      "hard": {
+        "stars": 7,
+        "branch": false
+      },
+      "normal": {
+        "stars": 7,
+        "branch": false
+      },
+      "oni": {
+        "stars": 10,
+        "branch": false
+      },
+      "ura": {
+        "stars": 10,
+        "branch": false
+      }
+    },
+    "preview": 0,
+    "category_id": 3,
+    "category": "VOCALOID™ Music",
+    "title_lang": {
+      "ja": null,
+      "en": null,
+      "cn": null,
+      "tw": null,
+      "ko": null
+    },
+    "subtitle_lang": {
+      "ja": null,
+      "en": null,
+      "cn": null,
+      "tw": null,
+      "ko": null
+    },
+    "type": "tja",
+    "music_type": "ogg",
+    "volume": 1.0,
+    "lyrics": false,
+    "offset": null,
+    "song_skin": null,
+    "maker": null,
+    "hash": null
+  },
+    {
+    "id": 8, 
+    "order": 8,
+    "title": "!!!カオスタイム!!!",
+    "subtitle": "t+pazolite",
+    "courses": {
+      "easy": {
+        "stars": 5,
+        "branch": false
+      },
+      "hard": {
+        "stars": ８,
+        "branch": false
+      },
+      "normal": {
+        "stars": 7,
+        "branch": false
+      },
+      "oni": {
+        "stars": 10,
+        "branch": false
+      },
+      "ura": {
+        "stars": 10,
+        "branch": false
+      }
+    },
+    "preview": 0,
+    "category_id": 7,
+    "category": "NamcoOriginal™ Music",
+    "title_lang": {
+      "ja": null,
+      "en": null,
+      "cn": null,
+      "tw": null,
+      "ko": null
+    },
+    "subtitle_lang": {
+      "ja": null,
+      "en": null,
+      "cn": null,
+      "tw": null,
+      "ko": null
+    },
+    "type": "tja",
+    "music_type": "ogg",
+    "volume": 1.0,
+    "lyrics": false,
+    "offset": null,
+    "song_skin": null,
+    "maker": null,
+    "hash": null
   }
 ]
