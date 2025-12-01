@@ -110,7 +110,7 @@
     },
     {
       "hide": false,
-      "start": false,
+      "start": true,
       "url": "../../plugins/debugging-testing/show-bpm.taikoweb.js"
     },
     {
