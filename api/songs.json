@@ -396,10 +396,10 @@
     "title": "神竜 〜Shinryu〜（裏）",
     "subtitle": "あず♪ ＆ Masahiro"Godspeed"Aoki",
     "courses": {
-      "easy": null
-      "hard": null
-      "normal": null
-      "oni": null
+      "easy": null,
+      "hard": null,
+      "normal": null,
+      "oni": null,
       "ura": {
         "stars": 10,
         "branch": false
