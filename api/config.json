@@ -136,12 +136,12 @@
     {
       "hide": true,
       "start": false,
-      "url": "../../customize/key.js"
+      "url": "../../plugins/customize/key.js"
     },
     {
       "hide": true,
       "start": false,
-      "url": "../../customize/fullscreen.js"
+      "url": "../../plugins/customize/fullscreen.js"
     }
   ],
   "preview_type": "mp3",
