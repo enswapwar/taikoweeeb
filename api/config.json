@@ -132,6 +132,16 @@
       "hide": true,
       "start": false,
       "url": "../../disable-judge-scores.taikoweb.js"
+    },
+    {
+      "hide": true,
+      "start": false,
+      "url": "../../customize/key.js"
+    },
+    {
+      "hide": true,
+      "start": false,
+      "url": "../../customize/fullscreen.js"
     }
   ],
   "preview_type": "mp3",
