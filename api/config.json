@@ -129,17 +129,17 @@
       "url": "../../plugins/debugging-testing/convert-lyrics-to-vtt.taikoweb.js"
     },
     {
-      "hide": true,
+      "hide": false,
       "start": false,
       "url": "../../disable-judge-scores.taikoweb.js"
     },
     {
-      "hide": true,
+      "hide": false,
       "start": false,
       "url": "../../plugins/customize/key.js"
     },
     {
-      "hide": true,
+      "hide": false,
       "start": false,
       "url": "../../plugins/customize/fullscreen.js"
     }
